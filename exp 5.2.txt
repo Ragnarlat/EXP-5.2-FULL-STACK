@@ -1,0 +1,104 @@
+// ================================
+// STUDENT MANAGEMENT SYSTEM (MVC)
+// ================================
+
+// ================================
+// Model (Simulated Mongoose Schema)
+// ================================
+class Student {
+  constructor(id, name, age, course) {
+    this._id = id;
+    this.name = name;
+    this.age = age;
+    this.course = course;
+  }
+}
+
+// In-memory "Database"
+let students = [
+  new Student("1", "Alice Johnson", 20, "Computer Science"),
+  new Student("2", "Bob Smith", 22, "Mechanical Engineering"),
+  new Student("3", "Charlie Lee", 21, "Business Administration"),
+];
+
+// ================================
+// Controller
+// ================================
+const studentController = {
+  // Get all students
+  getAll: (req, res) => {
+    console.log("\n📘 All Students:");
+    console.table(students);
+  },
+
+  // Get one student by ID
+  getById: (id) => {
+    const student = students.find((s) => s._id === id);
+    if (student) {
+      console.log(\n📗 Student Found (ID: ${id}));
+      console.table([student]);
+    } else {
+      console.log(\n❌ Student with ID ${id} not found);
+    }
+  },
+
+  // Create new student
+  create: (data) => {
+    const newStudent = new Student(
+      (students.length + 1).toString(),
+      data.name,
+      data.age,
+      data.course
+    );
+    students.push(newStudent);
+    console.log("\n🟢 Student Created:");
+    console.table([newStudent]);
+  },
+
+  // Update student by ID
+  update: (id, newData) => {
+    const student = students.find((s) => s._id === id);
+    if (student) {
+      Object.assign(student, newData);
+      console.log(\n🟡 Student Updated (ID: ${id}));
+      console.table([student]);
+    } else {
+      console.log(\n❌ Cannot update, student with ID ${id} not found);
+    }
+  },
+
+  // Delete student by ID
+  delete: (id) => {
+    const index = students.findIndex((s) => s._id === id);
+    if (index !== -1) {
+      const deleted = students.splice(index, 1)[0];
+      console.log(\n🔴 Student Deleted (ID: ${id}));
+      console.table([deleted]);
+    } else {
+      console.log(\n❌ Cannot delete, student with ID ${id} not found);
+    }
+  },
+};
+
+// ================================
+// Routes (Simulated HTTP Endpoints)
+// ================================
+function simulateRequests() {
+  console.log("🚀 Student Management System Started (Simulated MVC)\n");
+
+  studentController.getAll(); // GET all
+  studentController.getById("1"); // GET one
+  studentController.create({
+    name: "David Miller",
+    age: 23,
+    course: "Electrical Engineering",
+  }); // POST create
+  studentController.update("2", { name: "Bob Smith Jr.", age: 23 }); // PUT update
+  studentController.delete("1"); // DELETE
+  studentController.getAll(); // Show final list
+}
+
+// ================================
+// Run the Simulation
+// ================================
+simulateRequests();
